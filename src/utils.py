@@ -32,6 +32,19 @@ UF = {
 
 
 def gera_url(relatorio, no_anexo, ano, periodo, id_ente):
+    """Retorna URL de acordo com dois relatórios disponíveis: 'rreo' e 'rgf'.
+
+    Args:
+        relatorio (list[str]): Lista de relatórios.
+        no_anexo (list[int]): Lista com o número de anexos.
+        ano (list[int]): Lista com os anos.
+        periodo (list[int]): Lista com os períodos, seja bimestre ou quadrimestre.
+        id_ente (list[int]): Lista com os códigos IBGE dos estados.
+
+    Returns:
+        str: URL para requisição à API do SICONFI.
+    """
+
     prefix = 'http://apidatalake.tesouro.gov.br/ords/siconfi/tt/'
     params = 'an_exercicio={0}&' 'nr_periodo={1}&' 'id_ente={2}'
     try:
@@ -61,6 +74,13 @@ def gera_url(relatorio, no_anexo, ano, periodo, id_ente):
 
 
 def salva_dataset(relatorio, df, nome_df):
+    """Salva arquivo CSV dos dados retornados.
+
+    Args:
+        relatorio (str): 'rreo' ou 'rgf'.
+        df (pandas.DataFrame): Dataframe dos dados.
+        nome_df (str): Nome do arquivo.
+    """
 
     diretorio = os.path.join(os.getcwd(), 'datasets', relatorio)
     if not os.path.exists(diretorio):
@@ -70,21 +90,50 @@ def salva_dataset(relatorio, df, nome_df):
     df.to_csv(arquivo, sep=';', decimal=',', index=False, encoding='utf-8')
     print(f'{nome_df} salvo em {diretorio}')
 
+
 def contagem_por_relatorio(diretorio, relatorio, anexo, ano):
+    """Utilitário que traz a quantidade de arquivos por diretório.
+
+    Args:
+        diretorio (str): Diretório onde estão os arquivos CSV.
+        relatorio (str): 'rreo' ou 'rgf'.
+        anexo (int): Número do anexo.
+        ano (int): Ano.
+
+    Returns:
+        int: Contagens de arquivos baseados no diretório, relatório, anexo e ano.
+    """
+
     arquivos = os.listdir(diretorio)
     return len(
         [
-            arquivo for arquivo in arquivos 
+            arquivo
+            for arquivo in arquivos
             if arquivo.startswith(f'{relatorio}{anexo}') and ano in arquivo
         ]
     )
 
+
 def ufs_faltantes(diretorio, relatorio, anexo, ano):
+    """Baseado no diretório passado, analisa se existem 27 arquivos
+    para determinado relatório, anexo e ano e retorna os faltantes.
+
+    Args:
+        diretorio (str): Diretório onde estão os arquivos CSV.
+        relatorio (str): 'rreo' ou 'rgf'.
+        anexo (int): Número do anexo.
+        ano (int): Ano.
+
+    Returns:
+        list[int]: Lista com os códigos IBGE das UFs.
+    """
+
     arquivos = os.listdir(diretorio)
     cods_uf = [
-            arquivo.split('_')[1] for arquivo in arquivos 
-            if arquivo.startswith(f'{relatorio}{anexo}') and ano in arquivo
-        ]
-    
-    diff = list( set(UF.keys()) - set(cods_uf))
+        arquivo.split('_')[1]
+        for arquivo in arquivos
+        if arquivo.startswith(f'{relatorio}{anexo}') and ano in arquivo
+    ]
+
+    diff = list(set(UF.keys()) - set(cods_uf))
     return diff

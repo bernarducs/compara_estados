@@ -14,6 +14,5 @@ $ source .ve/bin/activate
 ```
 
 ### Falta
-- docstrings
 - CLI
 - testes

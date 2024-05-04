@@ -8,7 +8,17 @@ from .utils import UF, gera_url, salva_dataset
 
 
 def extrai_relatorio(relatorios, no_anexos, anos, periodos, cods_uf):
-    
+    """Faz chamadas a diversas funções para extração de dados do STN.
+       Atualmente apenas para estados.
+
+    Args:
+        relatorios (list[str]): Lista de relatórios orçamentários.
+        no_anexos (list[int]): Lista com os números dos anexos.
+        anos (list[int]): Lista comos números dos anexos.
+        periodos (list[int]): Lista com os números dos períodos.
+        cods_uf (lis[int]): Lista com os códigos dos estados.
+    """
+
     if cods_uf is None:
         cods_uf = UF
 
@@ -37,6 +47,19 @@ def extrai_relatorio(relatorios, no_anexos, anos, periodos, cods_uf):
 
 
 def busca_dados(url, tentativas=3):
+    """Executa requisições à API do STN.
+
+    Args:
+        url (str): URL para requisição.
+        tentativas (int, optional): Total de tentivas para cada URL. Padrão é 3.
+
+    Raises:
+        RuntimeError: Caso o total tentativas tenha ultrapassado o limite.
+
+    Returns:
+        dict: Objeto JSON com os dados de determinado relatório.
+    """
+
     for tentativa in range(tentativas):
         try:
             r = requests.get(url)
