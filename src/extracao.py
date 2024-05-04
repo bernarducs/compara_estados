@@ -7,7 +7,7 @@ import requests
 from .utils import UF, gera_url, salva_dataset
 
 
-def extrai_relatorio(relatorios, no_anexos, anos, periodos, cods_uf):
+def extrai_relatorio(relatorios, no_anexos, anos, periodos, cods_uf=None):
     """Faz chamadas a diversas funções para extração de dados do STN.
        Atualmente apenas para estados.
 
@@ -18,15 +18,17 @@ def extrai_relatorio(relatorios, no_anexos, anos, periodos, cods_uf):
         periodos (list[int]): Lista com os números dos períodos.
         cods_uf (lis[int]): Lista com os códigos dos estados.
     """
-
+    
     if cods_uf is None:
         cods_uf = UF
 
     for relatorio, no_anexo, ano, periodo, cod_uf in product(
         relatorios, no_anexos, anos, periodos, cods_uf
     ):
+        uf_nome = UF[str(cod_uf)]
+
         print(
-            f'Extraindo {relatorio} anexo {no_anexo} de {UF[cod_uf]}, ano de {ano}...'
+            f'Extraindo {relatorio} anexo {no_anexo} de {uf_nome}, ano de {ano}...'
         )
         url = gera_url(relatorio, no_anexo, ano, periodo, cod_uf)
 
@@ -34,7 +36,7 @@ def extrai_relatorio(relatorios, no_anexos, anos, periodos, cods_uf):
             base = busca_dados(url)
         except RuntimeError:
             print(
-                f'Timeout: Não foi possível recuperar os dados para {UF[cod_uf]}.'
+                f'Timeout: Não foi possível recuperar os dados para {uf_nome}.'
             )
             continue
 

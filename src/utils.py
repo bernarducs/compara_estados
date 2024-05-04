@@ -132,7 +132,7 @@ def ufs_faltantes(diretorio, relatorio, anexo, ano):
     cods_uf = [
         arquivo.split('_')[1]
         for arquivo in arquivos
-        if arquivo.startswith(f'{relatorio}{anexo}') and ano in arquivo
+        if arquivo.startswith(f'{relatorio}{anexo}') and str(ano) in arquivo
     ]
 
     diff = list(set(UF.keys()) - set(cods_uf))
