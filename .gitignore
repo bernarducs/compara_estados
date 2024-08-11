@@ -1,4 +1,3 @@
-ve/
 datasets/
 
 # Byte-compiled / optimized / DLL files
@@ -123,6 +122,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+ve/
+.ve/
 .env
 .venv
 env/
