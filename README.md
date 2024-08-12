@@ -23,7 +23,13 @@ Digamos que queremos extrair dados do anexo 3 do RREO, ano de 2023, segundo bime
 Todas as UFs serão extraídas. Caso precise apenas de alguns estados:
 
 ```bash
-(.ve) $ python comandos.py extrai_relatorio --relatorios=['rreo'] --no_anexos=[3] --anos=[2023] --periodos=[2]  --cods_uf=[26, 27]
+(.ve) $ python comandos.py extrai_relatorio --relatorios=['rreo'] --no_anexos=[3] --anos=[2023] --periodos=[2]  --cods_uf=[26,27]
+``` 
+
+Lembre-se, não use espaços nas listas, bash interpretará o comando de forma errada:
+
+```bash
+(.ve) $ python comandos.py extrai_relatorio --relatorios=['rreo'] --no_anexos=[1, 3] --anos=[2022, 2023, 2024] --periodos=[2]  --cods_uf=[26, 27] # ERRADO
 ``` 
 
 ### Falta
